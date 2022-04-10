@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Components{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  {% if components %}
+    <h2>Installed components:</h2>
+    <ul>
+      {% for component in components %}
+        <li title="{{ component }}">{{ component.name }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <details>
+      <summary>Add a component</summary>
+      <form method="post" action="/components/add">
+          <label for="cname">Component name:</label>
+          <input name="cname" id="cname" required>
+          <br />
+          <label for="curl">Component pull url:</label>
+          <input name="curl" id="curl" required>
+          <br />
+          <label for="crun">Component run commands:</label>
+          <input name="crun" id="crun" required>
+          <br />
+          <input type="submit" value="Add component">
+      </form>
+  </details>
+{% endblock %}

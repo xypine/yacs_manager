@@ -73,17 +73,20 @@ def auth_login_post():
     token = request.form['token']
     if validateToken(token):
         flash("You are now logged in.", "success")
+        if len(token) < 20:
+            flash(f"Current token length ({len(token)}) is below recommended length ({20})", "warn")
         resp = make_response(redirect("/"))
         resp.set_cookie('sToken', token)
         return resp
     else:
-        flash("Invalid Token", "warn")
+        flash("Invalid Token", "err")
         resp = make_response(render_template("auth/login.html"))
         return resp
 
 @app.route("/auth/logout")
 def auth_logout():
-    resp = make_response(render_template("auth/loggedout.html"))
+    flash("You have been logged out.", "warn")
+    resp = make_response(redirect("/"))
     resp.delete_cookie("sToken")
     return resp
 

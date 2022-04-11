@@ -78,7 +78,7 @@ def auth_login_post():
         if len(token) < 20:
             flash(f"Current token length ({len(token)}) is below recommended length ({20})", "warn")
         resp = make_response(redirect("/"))
-        resp.set_cookie('sToken', token)
+        resp.set_cookie('sToken', token, httponly = True)
         return resp
     else:
         flash("Invalid Token", "err")
@@ -98,4 +98,4 @@ def givetime():
 
 if __name__ == '__main__':
     app.secret_key = config.allowed_token
-    app.run(host='0.0.0.0', port=5000, debug=True) # ssl_context='adhoc'
+    app.run(host='0.0.0.0', port=5000, debug=False, ssl_context='adhoc') # ssl_context='adhoc'

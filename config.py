@@ -1,3 +1,3 @@
 import os
 
-allowed_token = os.getenv('YACSMS_TOKEN', 'UNSECUREDEFAULTTOKEN')
+allowed_token = os.getenv('YACSMS_TOKEN', 'UNSECUREDEFAULTTOKEN2179')

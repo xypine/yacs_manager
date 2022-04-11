@@ -5,11 +5,14 @@
 {% endblock %}
 
 {% block content %}
+  {% if msg %}
+    <p>{{ msg }}</p>
+  {% endif %}
   {% if components %}
     <h2>Installed components:</h2>
     <ul>
       {% for component in components %}
-        <li title="{{ component }}">{{ component.name }}</li>
+        <li title="{{ component }}"><button onclick="alert('{{ component.name }}')">×</button> {{ component.name }}</li>
       {% endfor %}
     </ul>
   {% endif %}

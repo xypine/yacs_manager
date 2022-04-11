@@ -1,2 +1,2 @@
 python3 -m pip install -r requirements.txt
-./server.py
+FLASK_ENV=development ./server.py

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from unittest import result
 from flask import Flask, make_response, redirect, render_template, request, g
 from flask_cors import CORS
 from datetime import datetime
@@ -35,8 +36,17 @@ def loggedin():
 def components_add():
     processToken()
     if g.tokenValid:
-        components = yacs.getComponents()
-        return redirect("/auth/login")
+        component = {}
+        component["name"] = request.form['cname']
+        component["pull_url"] = request.form['curl']
+        component["run"] = request.form['crun']
+        result = yacs.addComponent(component)
+        if result:
+            components = yacs.getComponents()
+            return render_template("loggedin.html", components=components, msg="Component Added!")
+        else:
+            components = yacs.getComponents()
+            return render_template("loggedin.html", components=components, msg="Failed to add component.")
     return make_response(redirect("/auth/login"))
 
 @app.route("/auth/login")

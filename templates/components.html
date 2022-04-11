@@ -4,6 +4,17 @@
   <h1>{% block title %}Components{% endblock %}</h1>
 {% endblock %}
 
+{% block script %}
+  <script>
+    function copyToClipBoard(item) {
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(item);
+        alert("Copied!");
+      }
+    }
+  </script>
+{% endblock %}
+
 {% block content %}
   {% if components %}
     <h2>Installed components:</h2>
@@ -12,7 +23,7 @@
         <li title="{{ component }}">
           <form method="post" action="/components/remove">
             <input type="hidden" name="cname" value="{{ component.name }}" />
-            <input type="submit" value="×">
+            <input type="submit" value="×" class="err">
           </form>
           <form method="post" action="/components/add">
             <input type="hidden" name="cname" value="{{ component.name }} 2" />
@@ -20,10 +31,13 @@
             <input type="hidden" name="crun" value="{{ component.run }}" />
             <input type="submit" value="duplicate">
           </form>
+          <button title="copy to clipboard" onclick='copyToClipBoard("{{ component }}")'><img class="icon" alt="copy to clipboard" src="{{ url_for('static', filename='icons/clipboard-regular.svg') }}" /></button>
           {{ component.name }}
         </li>
       {% endfor %}
     </ul>
+  {% else %}
+    <h2>No components installed according to component manifest</h2>
   {% endif %}
   <details>
       <summary>Add a component</summary>
@@ -40,6 +54,7 @@
           <input type="submit" value="Add component">
       </form>
   </details>
+  <button>Upgrade Components</button>
 {% endblock %}
 
 {% block style %}

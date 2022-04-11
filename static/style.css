@@ -11,10 +11,36 @@ html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg);
     color: var(--fg);
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    max-width: 50%;
+    margin-inline: auto;
 }
 
 a {
     color: var(--action);
+}
+
+button, input[type="submit"] {
+    background: var(--action);
+    padding: 0.5em 1em;
+    border: none;
+    cursor: pointer;
+}
+
+button.warn, input[type="submit"].warn {
+    background: var(--warn);
+}
+
+button.err, input[type="submit"].err {
+    background: var(--err);
+}
+
+img.icon {
+    height: 1em;
 }
 
 summary {

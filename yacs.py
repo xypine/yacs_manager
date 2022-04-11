@@ -33,3 +33,12 @@ def addComponent(component):
         return True
     else:
         return False
+
+def removeComponent(component_name):
+    newcomp = []
+    oldcomp = getComponents()
+    for c in oldcomp:
+        if c["name"] != component_name:
+            newcomp.append(c)
+    setComponents(newcomp)
+    return True

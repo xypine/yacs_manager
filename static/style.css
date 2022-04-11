@@ -1,3 +1,41 @@
+:root {
+    --bg: #222222;
+    --fg: white;
+    --action: #00aa88;
+    --success: #00aa88;
+    --warn: orange;
+    --err: red;
+}
+
 html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+a {
+    color: var(--action);
+}
+
+summary {
+    cursor: pointer;
+    user-select: none;
+    padding: .5em;
+}
+
+.flash {
+    padding: .5em;
+    margin: .5em 0;
+    font-size: 1.1em;
+    background: var(--warn);
+    color: var(--bg);
+    font-weight: 500;
+}
+
+.flash.err {
+    background: var(--err);
+}
+
+.flash.success {
+    background: var(--success);
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from unittest import result
-from flask import Flask, make_response, redirect, render_template, request, g
+from flask import Flask, make_response, redirect, render_template, request, g, flash
 from flask_cors import CORS
 from datetime import datetime
 
@@ -24,12 +24,12 @@ def helloWorld():
     processToken()
     return render_template("base.html")
 
-@app.route("/loggedin")
-def loggedin():
+@app.route("/components")
+def components():
     processToken()
     if g.tokenValid:
         components = yacs.getComponents()
-        return render_template("loggedin.html", components=components)
+        return render_template("components.html", components=components)
     return make_response(redirect("/auth/login"))
 
 @app.route("/components/add", methods=['POST'])
@@ -42,11 +42,25 @@ def components_add():
         component["run"] = request.form['crun']
         result = yacs.addComponent(component)
         if result:
-            components = yacs.getComponents()
-            return render_template("loggedin.html", components=components, msg="Component Added!")
+            flash(f"Component \"{component['name']}\" Added.", "success")
+            return make_response(redirect("/components"))
         else:
-            components = yacs.getComponents()
-            return render_template("loggedin.html", components=components, msg="Failed to add component.")
+            flash("Failed to add component.", "err")
+            return make_response(redirect("/components"))
+    return make_response(redirect("/auth/login"))
+
+@app.route("/components/remove", methods=['POST'])
+def components_remove():
+    processToken()
+    if g.tokenValid:
+        component_name = request.form['cname']
+        result = yacs.removeComponent(component_name)
+        if result:
+            flash(f"Component \"{component_name}\" Removed.", "success")
+            return make_response(redirect("/components"))
+        else:
+            flash("Failed to remove component.", "err")
+            return make_response(redirect("/components"))
     return make_response(redirect("/auth/login"))
 
 @app.route("/auth/login")
@@ -58,11 +72,13 @@ def auth_login():
 def auth_login_post():
     token = request.form['token']
     if validateToken(token):
+        flash("You are now logged in.", "success")
         resp = make_response(redirect("/"))
         resp.set_cookie('sToken', token)
         return resp
     else:
-        resp = make_response(render_template("auth/login.html", msg="Invalid Token"))
+        flash("Invalid Token", "warn")
+        resp = make_response(render_template("auth/login.html"))
         return resp
 
 @app.route("/auth/logout")
@@ -76,4 +92,5 @@ def givetime():
     return {'time':datetime.utcnow()}
 
 if __name__ == '__main__':
+    app.secret_key = config.allowed_token
     app.run(host='0.0.0.0', port=5000, debug=False, ssl_context='adhoc')

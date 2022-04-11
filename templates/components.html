@@ -5,14 +5,23 @@
 {% endblock %}
 
 {% block content %}
-  {% if msg %}
-    <p>{{ msg }}</p>
-  {% endif %}
   {% if components %}
     <h2>Installed components:</h2>
     <ul>
       {% for component in components %}
-        <li title="{{ component }}"><button onclick="alert('{{ component.name }}')">×</button> {{ component.name }}</li>
+        <li title="{{ component }}">
+          <form method="post" action="/components/remove">
+            <input type="hidden" name="cname" value="{{ component.name }}" />
+            <input type="submit" value="×">
+          </form>
+          <form method="post" action="/components/add">
+            <input type="hidden" name="cname" value="{{ component.name }} 2" />
+            <input type="hidden" name="curl" value="{{ component.pull_url }}" />
+            <input type="hidden" name="crun" value="{{ component.run }}" />
+            <input type="submit" value="duplicate">
+          </form>
+          {{ component.name }}
+        </li>
       {% endfor %}
     </ul>
   {% endif %}
@@ -31,4 +40,12 @@
           <input type="submit" value="Add component">
       </form>
   </details>
+{% endblock %}
+
+{% block style %}
+  <style>
+    form {
+      display: inline;
+    }
+  </style>
 {% endblock %}

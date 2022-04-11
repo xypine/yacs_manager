@@ -7,60 +7,102 @@
 {% block script %}
   <script>
     function copyToClipBoard(item) {
+      console.log(item);
       if(navigator.clipboard){
         navigator.clipboard.writeText(item);
         alert("Copied!");
+      }
+      else {
+        alert("Clipboard not available, content written to devconsole instead!");
       }
     }
   </script>
 {% endblock %}
 
 {% block content %}
+  <h2>Service</h2>
+  <div class="actions">
+    <button>Upgrade Components</button>
+  </div>
   {% if components %}
     <h2>Installed components:</h2>
-    <ul>
+    <div class="components">
       {% for component in components %}
-        <li title="{{ component }}">
-          <form method="post" action="/components/remove">
-            <input type="hidden" name="cname" value="{{ component.name }}" />
-            <input type="submit" value="×" class="err">
-          </form>
-          <form method="post" action="/components/add">
-            <input type="hidden" name="cname" value="{{ component.name }} 2" />
-            <input type="hidden" name="curl" value="{{ component.pull_url }}" />
-            <input type="hidden" name="crun" value="{{ component.run }}" />
-            <input type="submit" value="duplicate">
-          </form>
-          <button title="copy to clipboard" onclick='copyToClipBoard("{{ component }}")'><img class="icon" alt="copy to clipboard" src="{{ url_for('static', filename='icons/clipboard-regular.svg') }}" /></button>
-          {{ component.name }}
-        </li>
+        <div title="{{ component }}">
+          <details>
+            <summary>
+              <div class="component-summary">
+                {{ component.name }}
+                <spacer></spacer>
+                <form method="post" action="/components/remove">
+                  <input type="hidden" name="cname" value="{{ component.name }}" />
+                  <input type="submit" value="×" class="err">
+                </form>
+                <form method="post" action="/components/add">
+                  <input type="hidden" name="cname" value="{{ component.name }} 2" />
+                  <input type="hidden" name="curl" value="{{ component.pull_url }}" />
+                  <input type="hidden" name="crun" value="{{ component.run }}" />
+                  <input type="submit" value="duplicate">
+                </form>
+                <button title="copy to clipboard" onclick='copyToClipBoard(`{{ toml.dumps(component) }}`)'><img class="icon" alt="copy to clipboard" src="{{ url_for('static', filename='icons/clipboard-regular.svg') }}" /></button>
+              </div>
+            </summary>
+            <div class="component-details">
+              <p>Name: {{ component.name }}</p>
+              <p>Pull url: {{ component.pull_url }}</p>
+              Run Steps:
+              <ol>
+                {% for step in component.run %}
+                  <li>{{ step }}</li>
+                {% endfor %}
+              </ol>
+            </div>
+          </details>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
     <h2>No components installed according to component manifest</h2>
   {% endif %}
+  <hr />
   <details>
       <summary>Add a component</summary>
-      <form method="post" action="/components/add">
-          <label for="cname">Component name:</label>
-          <input name="cname" id="cname" required>
+      <form method="post" action="/components/add" class="fill-w">
+          <div class="flex-input">
+            <label for="cname">Component name:</label>
+            <input name="cname" id="cname" required>
+          </div>
           <br />
-          <label for="curl">Component pull url:</label>
-          <input name="curl" id="curl" required>
+          <div class="flex-input">
+            <label for="curl">Component pull url:</label>
+            <input name="curl" id="curl" required>
+          </div>
           <br />
-          <label for="crun">Component run commands:</label>
-          <input name="crun" id="crun" required>
+          <div class="flex-input">
+            <label for="crun">Component run commands:</label>
+            <input name="crun" id="crun" required placeholder='separate commands with a semicolon ";"'>
+          </div>
           <br />
-          <input type="submit" value="Add component">
+          <div class="flex-input">
+            <input type="submit" value="Add component">
+          </div>
       </form>
   </details>
-  <button>Upgrade Components</button>
 {% endblock %}
 
 {% block style %}
   <style>
+    .actions {
+      margin: .5em 0;
+      padding: .5em 0;
+    }
     form {
-      display: inline;
+      display: inline-block;
+    }
+    .component-summary {
+      display: inline-flex;
+      gap: .25em;
+      min-width: calc(100% - 2em);
     }
   </style>
 {% endblock %}

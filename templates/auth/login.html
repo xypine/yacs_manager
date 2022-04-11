@@ -8,10 +8,31 @@
     {% if g.token %}
         <h2>You are already logged in.</h2>
     {% else %}
-        <form method="post">
-            <label for="password">Token</label>
-            <input type="password" name="token" id="token" required>
-            <input type="submit" value="Log In">
+        <form method="post" class="fill-w">
+            <div class="flex-input">
+                <label for="password">Token</label>
+                <input type="password" name="token" id="token" required autofocus placeholder="UNSECUREDEFAULTTOKEN2179">
+            </div>
+            <div class="flex-input">
+                <div></div>
+                <input type="submit" value="Log In">
+            </div>
         </form>
     {% endif %}
+{% endblock %}
+
+{% block style %}
+    <style>
+        form {
+            display: inline-block;
+        }
+        .flex-input {
+            margin-bottom: .5em;
+        }
+        input[type="password"] {
+            border: none;
+            margin: 0;
+            padding: 0.5em 1em;
+        }
+    </style>
 {% endblock %}

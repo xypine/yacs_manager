@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-from unittest import result
 from flask import Flask, make_response, redirect, render_template, request, g, flash
 from flask_cors import CORS
 from datetime import datetime
+
+import toml
+
 
 import config
 import yacs
@@ -29,7 +31,7 @@ def components():
     processToken()
     if g.tokenValid:
         components = yacs.getComponents()
-        return render_template("components.html", components=components)
+        return render_template("components.html", components=components, toml=toml)
     return make_response(redirect("/auth/login"))
 
 @app.route("/components/add", methods=['POST'])
@@ -39,7 +41,7 @@ def components_add():
         component = {}
         component["name"] = request.form['cname']
         component["pull_url"] = request.form['curl']
-        component["run"] = request.form['crun']
+        component["run"] = request.form['crun'].split(";")
         result = yacs.addComponent(component)
         if result:
             flash(f"Component \"{component['name']}\" Added.", "success")
@@ -96,4 +98,4 @@ def givetime():
 
 if __name__ == '__main__':
     app.secret_key = config.allowed_token
-    app.run(host='0.0.0.0', port=5000, debug=False, ssl_context='adhoc')
+    app.run(host='0.0.0.0', port=5000, debug=True) # ssl_context='adhoc'

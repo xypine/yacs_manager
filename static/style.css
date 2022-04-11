@@ -1,10 +1,24 @@
 :root {
     --bg: #222222;
     --fg: white;
-    --action: #00aa88;
+    --action: #46B6E6;
     --success: #00aa88;
     --warn: orange;
     --err: red;
+    /*#9DE9C0*/
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.75em;
+}
+
+::marker {
+    font-size: 1em;
 }
 
 html, body {
@@ -49,6 +63,30 @@ summary {
     padding: .5em;
 }
 
+form {
+    display: flex;
+    place-items: baseline;
+    place-content: center;
+    gap: .5em;
+}
+
+.fill-h {
+    min-height: 100%;
+}
+
+.fill-w {
+    min-width: 100%;
+}
+
+.flex-input {
+    display: flex;
+    place-items: baseline;
+    place-content: center;
+}
+.flex-input * {
+    flex: 1;
+}
+
 .flash {
     padding: .5em;
     margin: .5em 0;
@@ -64,4 +102,10 @@ summary {
 
 .flash.success {
     background: var(--success);
+}
+
+/* Custom components */
+
+spacer {
+    flex: 1;
 }

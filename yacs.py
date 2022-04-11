@@ -1,6 +1,6 @@
 import toml
 
-yacs_path = "../../"
+yacs_path = "../../../"
 
 def yacs_c_c_path():
     return f"{yacs_path}yacs_components.toml"

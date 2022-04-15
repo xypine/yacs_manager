@@ -22,7 +22,9 @@
 {% block content %}
   <h2>Service</h2>
   <div class="actions">
-    <button>Upgrade Components</button>
+    <form method="post" action="/components/update">
+      <input type="submit" value="Update Components" class="warn" title="Updating components will erase their state.">
+    </form>
   </div>
   {% if components %}
     <h2>Installed components:</h2>

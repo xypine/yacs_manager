@@ -72,6 +72,19 @@ def components_remove():
             return make_response(redirect("/components"))
     return make_response(redirect("/auth/login"))
 
+@app.route("/components/update", methods=['POST'])
+def components_update():
+    processToken()
+    if g.tokenValid:
+        result = yacs.updateComponents()
+        if result:
+            flash(f"Updated all components.", "success")
+            return make_response(redirect("/components"))
+        else:
+            flash("Failed to update components.", "err")
+            return make_response(redirect("/components"))
+    return make_response(redirect("/auth/login"))
+
 @app.route("/auth/login")
 def auth_login():
     processToken()
@@ -104,5 +117,6 @@ def givetime():
     return {'time':datetime.utcnow()}
 
 if __name__ == '__main__':
+    yacs.parseData()
     app.secret_key = config.allowed_token
     app.run(host='0.0.0.0', port=5000, debug=False, ssl_context='adhoc') # ssl_context='adhoc'

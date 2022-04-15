@@ -2,11 +2,11 @@ from os import kill
 import subprocess
 import toml
 
-yacs_path = "../../../"
+yacs_path = "../../.."
 yacs_exec = "../../../yacs.x86_64"
 
 def yacs_c_c_path():
-    return f"{yacs_path}yacs_components.toml"
+    return f"{yacs_path}/yacs_components.toml"
 
 def parseData():
     global yacs_path, yacs_exec

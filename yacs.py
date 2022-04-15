@@ -70,7 +70,16 @@ def restartComponents():
 def killComponents():
     pname = yacs_exec.split("/")[-1]
     print(f"Killing all processes with the name \"{pname}\" (and any children of those processes)")
-    ps = subprocess.run(["pkill", "-f", pname, "-P"], check=True, capture_output=True)
-    ps2 = subprocess.run(["xargs", "pkill", "-P"], input=ps.stdout, capture_output=True)
-    print("Kill command output: ", ps2.stdout)
+    pid = subprocess.run(["pgrep", "-f", f"{pname}"], capture_output=True)
+    print("pid search command output: ", pid.stdout)
+    print("pid search errors: ", pid.stderr)
+    if pid.returncode != 0:
+        return False
+    pid = pid.stdout.decode("UTF-8").strip()
+    print(f"Killing yacs (pid {pid}) by user command...")
+    ps = subprocess.run(["kill", "-SIGINT", f"-{pid}"], capture_output=True)
+    print("Kill command output: ", ps.stdout)
+    print("Kill command errors: ", ps.stderr)
+    if ps.returncode != 0:
+        return False
     return True

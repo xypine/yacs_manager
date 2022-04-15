@@ -25,11 +25,23 @@
     <form method="post" action="/components/update">
       <input type="submit" value="Update Components" class="warn" title="Updating components will erase their state.">
     </form>
-    <form method="post" action="/components/restart">
+    <!-- <form method="post" action="/components/restart">
       <input type="submit" value="Restart yacs" class="warn" title="Restarting yacs will erase all component's state.">
-    </form>
+    </form> -->
     <form method="post" action="/components/kill">
       <input type="submit" value="Kill yacs" class="err" title="Killing yacs will kill this management interface as well." onclick="return confirm('Killing yacs will stop this management interface. You won\'t be able to restart it without direct access to the server. Please confirm you want to continue with this action.');">
+    </form>
+  </div>
+  <h2>Systemd</h2>
+  <div class="actions">
+    <form method="post" action="/components/systemd/restart">
+      <input type="submit" value="Restart yacs through systemd" class="warn" title="Restarting yacs will erase all component's state.">
+    </form>
+  </div>
+  <h2>Host</h2>
+  <div class="actions">
+    <form method="post" action="/system/restart">
+      <input type="submit" value="Restart Host" class="err" title="Restarting the host computer might not be possible depending on the permissions yacs has been given." onclick="return confirm('Restarting the computer will stop this management interface until it is started again. If you don\'t have a way to start yacs, this is a really bad idea. Please confirm you want to continue with this action.');">
     </form>
   </div>
   {% if components %}

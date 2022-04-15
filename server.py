@@ -9,6 +9,7 @@ import json
 
 import config
 import yacs
+import system
 
 app = Flask(__name__)
 CORS(app)
@@ -108,6 +109,19 @@ def components_kill():
             return make_response(redirect("/components"))
         else:
             flash("Failed to kill yacs.", "err")
+            return make_response(redirect("/components"))
+    return make_response(redirect("/auth/login"))
+
+@app.route("/system/restart", methods=['POST'])
+def system_restart():
+    processToken()
+    if g.tokenValid:
+        result = system.restart()
+        if result:
+            flash(f"Reboot requested.", "success")
+            return make_response(redirect("/components"))
+        else:
+            flash("Failed to request a reboot.", "err")
             return make_response(redirect("/components"))
     return make_response(redirect("/auth/login"))
 

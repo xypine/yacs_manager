@@ -69,6 +69,6 @@ def restartComponents():
 
 def killComponents():
     pname = yacs_exec.split("/")[-1]
-    print(f"Killing all processes with the name \”{pname}\"")
+    print(f"Killing all processes with the name \"{pname}\"")
     subprocess.run(["pkill", "-f", pname, "-P"])
     return True

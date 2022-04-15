@@ -11,15 +11,15 @@ def yacs_c_c_path():
 def parseData():
     global yacs_path, yacs_exec
     data = toml.load(yacs_c_c_path())
-    if "yacs" in data:
-        yacs_config = data["yacs"]
-        print(f"Yacs config found: {yacs_config}")
-        if "path" in yacs_config and yacs_config['path'] != yacs_path:
-            print(f"Setting yacs path from {yacs_path} to {yacs_config['path']}")
-            yacs_path = yacs_config["path"]
-        if "exec" in yacs_config and yacs_config['exec'] != yacs_exec:
-            print(f"Setting yacs exec from {yacs_exec} to {yacs_config['exec']}")
-            yacs_exec = yacs_config["exec"]
+    if "paths" in data:
+        yacs_pathconfig = data["paths"]
+        print(f"Yacs paths config found: {yacs_pathconfig}")
+        if "main" in yacs_pathconfig and yacs_pathconfig['main'] != yacs_path:
+            print(f"Setting yacs path from {yacs_path} to {yacs_pathconfig['main']}")
+            yacs_path = yacs_pathconfig["main"]
+        if "exec" in yacs_pathconfig and yacs_pathconfig['exec'] != yacs_exec:
+            print(f"Setting yacs exec from {yacs_exec} to {yacs_pathconfig['exec']}")
+            yacs_exec = yacs_pathconfig["exec"]
     return data
 
 def writeData(data):

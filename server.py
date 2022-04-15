@@ -85,6 +85,32 @@ def components_update():
             return make_response(redirect("/components"))
     return make_response(redirect("/auth/login"))
 
+@app.route("/components/restart", methods=['POST'])
+def components_restart():
+    processToken()
+    if g.tokenValid:
+        result = yacs.restartComponents()
+        if result:
+            flash(f"yacs restarted.", "success")
+            return make_response(redirect("/components"))
+        else:
+            flash("Failed to restart yacs.", "err")
+            return make_response(redirect("/components"))
+    return make_response(redirect("/auth/login"))
+
+@app.route("/components/kill", methods=['POST'])
+def components_kill():
+    processToken()
+    if g.tokenValid:
+        result = yacs.killComponents()
+        if result:
+            flash(f"yacs killed.", "success")
+            return make_response(redirect("/components"))
+        else:
+            flash("Failed to kill yacs.", "err")
+            return make_response(redirect("/components"))
+    return make_response(redirect("/auth/login"))
+
 @app.route("/auth/login")
 def auth_login():
     processToken()

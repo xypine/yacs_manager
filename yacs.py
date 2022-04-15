@@ -1,3 +1,4 @@
+from os import kill
 import subprocess
 import toml
 
@@ -56,5 +57,18 @@ def removeComponent(component_name):
     return True
 
 def updateComponents():
+    print("Updating components with yacs...")
     subprocess.run([f"{yacs_exec}", "update-components"])
+    return True
+
+def restartComponents():
+    killComponents()
+    print("Restarting yacs...")
+    subprocess.run([f"{yacs_exec}", "run-components"])
+    return True
+
+def killComponents():
+    pname = yacs_exec.split("/")[-1]
+    print(f"Killing all processes with the name \”{pname}\"")
+    subprocess.run(["pkill", "-f", pname, "-P"])
     return True

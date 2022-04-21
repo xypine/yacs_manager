@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Settings{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <h2>Token</h2>
+  <details>
+        <summary>Change access token</summary>
+        <form method="post" action="/auth/changepswd" class="fill-w">
+            <div class="flex-input">
+                <label for="token_new">New Token:</label>
+                <input name="token_new" id="token_new" required>
+            </div>
+            <br />
+            <div class="flex-input">
+                <input type="submit" value="Change access token">
+            </div>
+        </form>
+    </details>
+{% endblock %}
+
+{% block style %}
+  <style>
+    form {
+      display: inline-block;
+    }
+  </style>
+{% endblock %}

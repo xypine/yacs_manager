@@ -12,17 +12,21 @@ import yacs
 import system
 
 app = Flask(__name__)
-app.secret_key = config.allowed_token
+app.secret_key = config.get_allowed_token()
 CORS(app)
 
 def validateToken(token):
-    return token == config.allowed_token
+    return token == config.get_allowed_token()
 
 def processToken():
     token = request.cookies.get('sToken')
     g.tokenValid = validateToken(token)
     if g.tokenValid:
         g.token = token
+        if len(token) < 20:
+            flash(f"Current token length ({len(token)}) is below recommended length ({20})", "warn")
+        if token == "UNSECUREDEFAULTTOKEN2179":
+            flash(f"YOU ARE USING THE DEFAULT TOKEN, PLEASE CHANGE IT IN THE SETTINGS", "warn")
 
 @app.route("/")
 def helloWorld():
@@ -35,6 +39,13 @@ def components():
     if g.tokenValid:
         components = yacs.getComponents()
         return render_template("components.html", components=components, toml=toml)
+    return make_response(redirect("/auth/login"))
+
+@app.route("/settings")
+def settings():
+    processToken()
+    if g.tokenValid:
+        return render_template("settings.html")
     return make_response(redirect("/auth/login"))
 
 @app.route("/components/add", methods=['POST'])
@@ -136,8 +147,6 @@ def auth_login_post():
     token = request.form['token']
     if validateToken(token):
         flash("You are now logged in.", "success")
-        if len(token) < 20:
-            flash(f"Current token length ({len(token)}) is below recommended length ({20})", "warn")
         resp = make_response(redirect("/"))
         resp.set_cookie('sToken', token, httponly = True)
         return resp
@@ -152,6 +161,19 @@ def auth_logout():
     resp = make_response(redirect("/"))
     resp.delete_cookie("sToken")
     return resp
+
+@app.route("/auth/changepswd", methods=['POST'])
+def auth_change_password():
+    processToken()
+    if g.tokenValid:
+        token_new = request.form['token_new']
+        config.setToken(token_new)
+        app.secret_key = config.get_allowed_token()
+        flash(f"Token Changed.", "success")
+        resp = make_response(redirect("/"))
+        resp.set_cookie('sToken', token_new, httponly = True)
+        return resp
+    return make_response(redirect("/auth/login"))
 
 @app.route("/time")
 def givetime():

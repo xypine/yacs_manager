@@ -56,12 +56,16 @@ def components_add():
         component["name"] = request.form['cname']
         component["pull_url"] = request.form['curl']
         component["run"] = request.form['crun']
+        component["run_after_update"] = request.form['crun_after_update']
         print("crun", request.form['crun'])
         if component["run"].startswith("['") and component["run"].endswith("']"):
             component["run"] = json.loads(component["run"].replace("'", '"'))
-#           component["run"] = component["run"].strip("]'[").split(', ')
         else:
             component["run"] = component["run"].split(";")
+        if component["run_after_update"].startswith("['") and component["run_after_update"].endswith("']"):
+            component["run_after_update"] = json.loads(component["run_after_update"].replace("'", '"'))
+        else:
+            component["run_after_update"] = component["run_after_update"].split(";")
         result = yacs.addComponent(component)
         if result:
             flash(f"Component \"{component['name']}\" Added.", "success")

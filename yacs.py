@@ -38,7 +38,7 @@ def setComponents(components):
     writeData(data)
 
 def addComponent(component):
-    if "name" in component and "pull_url" in component and "run" in component:
+    if "name" in component and "pull_url" in component and "run" in component and "run_after_update" in component:
         oldcomp = getComponents()
         oldcomp.append(component)
         print(f"New components: {oldcomp}")

@@ -76,6 +76,12 @@
                   <li>{{ step }}</li>
                 {% endfor %}
               </ol>
+              Run Steps after update:
+              <ol>
+                {% for step in component.run_after_update %}
+                  <li>{{ step }}</li>
+                {% endfor %}
+              </ol>
             </div>
           </details>
         </div>
@@ -101,6 +107,11 @@
           <div class="flex-input">
             <label for="crun">Component run commands:</label>
             <input name="crun" id="crun" required placeholder='separate commands with a semicolon ";"'>
+          </div>
+          <br />
+          <div class="flex-input">
+            <label for="crun_after_update">Component after-update run commands:</label>
+            <input name="crun_after_update" id="crun_after_update" required placeholder='separate commands with a semicolon ";"'>
           </div>
           <br />
           <div class="flex-input">
